@@ -1,12 +1,15 @@
+import { UserModel } from "../../models/UserModel.js";
 
 
-export const createCategory = async(req, res) => {
+export const createUser = async(req, res) => {
  try {
-     const { staff_id, username, password, staff_name, email_id  } = req.body;
-     await CategoryModel.create({
-        category_id: staff_id,
-        categoryname: username,
-       
+     const { user_id, username, password, user_name, email_id  } = req.body;
+     await UserModel.create({
+        user_id: staff_id,
+        username: username,
+        password: password,
+        user_name: staff_name,
+        email_id: email_id,
 
 
      });
@@ -23,12 +26,12 @@ export const createCategory = async(req, res) => {
  }
 };
 
-export const updateCategory = async (req, res) => {
+export const updateUser = async (req, res) => {
    try {
-      const category_id = req.params.id;
+      const staff_id = req.params.id;
       const { name, description } = req.body;
 
-      const dataToUpdate = await CategoryModel.findById(category_id);
+      const dataToUpdate = await UserModel.findById(user_id);
 
       dataToUpdate.name = name;
       dataToUpdate.description = description;
@@ -51,13 +54,13 @@ export const updateCategory = async (req, res) => {
 };
 
 
-export const deleteCategory = async (req, res) => {
+export const deleteStaff = async (req, res) => {
    try {
-      const category_id = req.params.id;
+      const user_id = req.params.id;
       
 
 
-       await CategoryModel.findByIdAndDelete(category_id);
+       await UserModel.findByIdAndDelete(user_id);
 
 
       return res.status(200).json({
@@ -75,16 +78,16 @@ export const deleteCategory = async (req, res) => {
 
 };
 
-export const viewCategory = async (req, res) => {
+export const viewUser = async (req, res) => {
    try {
-       const staff_id = req.params.id;
+       const user_id = req.params.id;
 
-       const staff = await CategoryModel.findById(category_id);
+       const user = await UserModel.findById(user_id);
 
        return req.status(200).json({
            success: true,
            message: 'Fetched',
-           data: { category: category},
+           data: { user: user},
        });
    }   catch (error) {
        return res.status(500).json({
@@ -94,14 +97,14 @@ export const viewCategory = async (req, res) => {
    }
 };
 
-export const getAllStaff = async (req, res) => {
+export const getAllUser = async (req, res) => {
    try {
-       const category = await CategoryModel.find();
+       const user = await UserModel.find();
 
        return res.status(200).json({
            success: true,
            message: 'All Data Fetched',
-           data: { category: category},
+           data: { user: user},
        });
    } catch (error) {
        return res.status(500).json({

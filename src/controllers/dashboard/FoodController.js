@@ -1,12 +1,12 @@
+import { StaffModel as FoodModel } from "../../models/StaffModel.js";
 
-
-export const createCategory = async(req, res) => {
+export const createStaff = async(req, res) => {
  try {
      const { staff_id, username, password, staff_name, email_id  } = req.body;
-     await CategoryModel.create({
-        category_id: staff_id,
-        categoryname: username,
-       
+     await FoodModel.create({
+        food_id: food_id,
+        foodname: foodname,
+        
 
 
      });
@@ -23,12 +23,12 @@ export const createCategory = async(req, res) => {
  }
 };
 
-export const updateCategory = async (req, res) => {
+export const updateFood = async (req, res) => {
    try {
-      const category_id = req.params.id;
+      const staff_id = req.params.id;
       const { name, description } = req.body;
 
-      const dataToUpdate = await CategoryModel.findById(category_id);
+      const dataToUpdate = await FoodModel.findById(food_id);
 
       dataToUpdate.name = name;
       dataToUpdate.description = description;
@@ -51,13 +51,13 @@ export const updateCategory = async (req, res) => {
 };
 
 
-export const deleteCategory = async (req, res) => {
+export const deleteFood = async (req, res) => {
    try {
-      const category_id = req.params.id;
+      const food_id = req.params.id;
       
 
 
-       await CategoryModel.findByIdAndDelete(category_id);
+       await FoodModel.findByIdAndDelete(food_id);
 
 
       return res.status(200).json({
@@ -75,16 +75,16 @@ export const deleteCategory = async (req, res) => {
 
 };
 
-export const viewCategory = async (req, res) => {
+export const viewFood = async (req, res) => {
    try {
        const staff_id = req.params.id;
 
-       const staff = await CategoryModel.findById(category_id);
+       const staff = await FoodModel.findById(food_id);
 
        return req.status(200).json({
            success: true,
            message: 'Fetched',
-           data: { category: category},
+           data: { food: food},
        });
    }   catch (error) {
        return res.status(500).json({
@@ -94,14 +94,14 @@ export const viewCategory = async (req, res) => {
    }
 };
 
-export const getAllStaff = async (req, res) => {
+export const getAllFood = async (req, res) => {
    try {
-       const category = await CategoryModel.find();
+       const food = await FoodModel.find();
 
        return res.status(200).json({
            success: true,
            message: 'All Data Fetched',
-           data: { category: category},
+           data: { food: food},
        });
    } catch (error) {
        return res.status(500).json({
