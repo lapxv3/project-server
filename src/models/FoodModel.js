@@ -1,30 +1,19 @@
-import { email } from 'envalid';
 import mongoose from 'mongoose';
 
-const staffSchema = new mongoose.Schema(
+const foodSchema = new mongoose.Schema(
 	{
-		staff_id : {
+		food_id : {
 			type: String,
 			required: true,
 		},
 
-	    username : {
+	    foodFame : {
 			type: String,
 			required: false,
 		},
 
-		password : {
+		price : {
 			type: Number,
-			required: false,
-		},
-
-		staff_name : {
-			type: String,
-			required: false,
-		},
-
-		email_id : {
-			type: String,
 			required: false,
 		},
 
@@ -34,4 +23,4 @@ const staffSchema = new mongoose.Schema(
 	{ timestamps: true },
 );
 
-export const StaffModel = mongoose.model('staffs', staffSchema);
+export const FoodModel = mongoose.model('foods', foodSchema);

@@ -1,37 +1,20 @@
-import { email } from 'envalid';
 import mongoose from 'mongoose';
 
-const staffSchema = new mongoose.Schema(
+const categorySchema = new mongoose.Schema(
 	{
-		staff_id : {
+		category_id : {
 			type: String,
 			required: true,
 		},
 
-	    username : {
+	    categoryname : {
 			type: String,
 			required: false,
 		},
 
-		password : {
-			type: Number,
-			required: false,
-		},
-
-		staff_name : {
-			type: String,
-			required: false,
-		},
-
-		email_id : {
-			type: String,
-			required: false,
-		},
-
-		
 
 	},
 	{ timestamps: true },
 );
 
-export const StaffModel = mongoose.model('staffs', staffSchema);
+export const CategoryModel = mongoose.model('categories', categorySchema);

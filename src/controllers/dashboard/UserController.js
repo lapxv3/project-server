@@ -1,14 +1,13 @@
 import { UserModel } from "../../models/UserModel.js";
 
-
 export const createUser = async(req, res) => {
  try {
      const { user_id, username, password, user_name, email_id  } = req.body;
      await UserModel.create({
-        user_id: staff_id,
+        user_id: user_id,
         username: username,
         password: password,
-        user_name: staff_name,
+        user_name: user_name,
         email_id: email_id,
 
 
@@ -54,7 +53,7 @@ export const updateUser = async (req, res) => {
 };
 
 
-export const deleteStaff = async (req, res) => {
+export const deleteUser = async (req, res) => {
    try {
       const user_id = req.params.id;
       

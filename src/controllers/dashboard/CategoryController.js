@@ -1,11 +1,12 @@
+import { CategoryModel } from "../../models/CategoryModel.js";
 
 
 export const createCategory = async(req, res) => {
  try {
-     const { staff_id, username, password, staff_name, email_id  } = req.body;
+     const { category_id, categoryname } = req.body;
      await CategoryModel.create({
-        category_id: staff_id,
-        categoryname: username,
+        category_id: category_id,
+        categoryname: categoryname,
        
 
 
@@ -77,9 +78,9 @@ export const deleteCategory = async (req, res) => {
 
 export const viewCategory = async (req, res) => {
    try {
-       const staff_id = req.params.id;
+       const category_id = req.params.id;
 
-       const staff = await CategoryModel.findById(category_id);
+       const category = await CategoryModel.findById(category_id);
 
        return req.status(200).json({
            success: true,
@@ -94,7 +95,7 @@ export const viewCategory = async (req, res) => {
    }
 };
 
-export const getAllStaff = async (req, res) => {
+export const getAllCategory = async (req, res) => {
    try {
        const category = await CategoryModel.find();
 

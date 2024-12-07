@@ -1,13 +1,14 @@
-import { StaffModel as FoodModel } from "../../models/StaffModel.js";
+import { FoodModel } from "../../models/FoodModel.js";
 
-export const createStaff = async(req, res) => {
+
+export const createFood = async(req, res) => {
  try {
-     const { staff_id, username, password, staff_name, email_id  } = req.body;
-     await FoodModel.create({
-        food_id: food_id,
-        foodname: foodname,
-        
 
+     const { foodId , foodName , price } = req.body;
+     await FoodModel.create({
+        food_id: foodId,
+        foodname: foodName,
+        price: price,
 
      });
 
@@ -25,7 +26,7 @@ export const createStaff = async(req, res) => {
 
 export const updateFood = async (req, res) => {
    try {
-      const staff_id = req.params.id;
+      const food_id = req.params.id;
       const { name, description } = req.body;
 
       const dataToUpdate = await FoodModel.findById(food_id);
@@ -77,9 +78,9 @@ export const deleteFood = async (req, res) => {
 
 export const viewFood = async (req, res) => {
    try {
-       const staff_id = req.params.id;
+       const food_id = req.params.id;
 
-       const staff = await FoodModel.findById(food_id);
+       const food = await FoodModel.findById(food_id);
 
        return req.status(200).json({
            success: true,
