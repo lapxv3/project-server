@@ -1,38 +1,57 @@
+import { CategoryModel } from "../../models/CategoryModel.js";
 import { FoodModel } from "../../models/FoodModel.js";
+import path from 'path';
 
 
-export const createFood = async(req, res) => {
- try {
+export const createFood = async (req, res) => {
+   try {
 
-     const { foodId , foodName , price } = req.body;
-     await FoodModel.create({
-        food_id: foodId,
-        foodname: foodName,
-        price: price,
 
-     });
+      const { foodName, price, category } = req.body;
+      let image = 'uploads' + req.file?.path.split(path.sep + 'uploads').at(1);
 
-     return res.status(200).json({
-        success: true,
-        message: 'Created Successfully!',
-     });
- } catch (error){
-    return res.status(500).json({
-        success: false,
-        message: error.message,
-    });
- }
+      console.log(req.file)
+
+      await FoodModel.create({
+         image: image,
+         foodName: foodName,
+         price: price,
+         category: category,
+
+      });
+
+      return res.status(200).json({
+         success: true,
+         message: 'Created Successfully!',
+      });
+   } catch (error) {
+      console.log(error)
+      return res.status(500).json({
+         success: false,
+         message: error.message,
+      });
+   }
 };
 
 export const updateFood = async (req, res) => {
    try {
       const food_id = req.params.id;
-      const { name, description } = req.body;
+      const { foodName, price, category } = req.body;
+      console.log(req.body)
+      let imageFile
+      console.log(req.file);
 
       const dataToUpdate = await FoodModel.findById(food_id);
 
-      dataToUpdate.name = name;
-      dataToUpdate.description = description;
+      if (req.file) {
+         imageFile = 'uploads' + req.file?.path.split(path.sep + 'uploads').at(1);
+         dataToUpdate.image = imageFile;
+
+      }
+      dataToUpdate.foodName = foodName;
+      dataToUpdate.price = price;
+      dataToUpdate.category = category;
+
 
       await dataToUpdate.save();
 
@@ -42,7 +61,7 @@ export const updateFood = async (req, res) => {
       });
 
 
-   } catch (error){
+   } catch (error) {
       return res.status(500).json({
          success: false,
          message: 'Server error'
@@ -55,10 +74,10 @@ export const updateFood = async (req, res) => {
 export const deleteFood = async (req, res) => {
    try {
       const food_id = req.params.id;
-      
 
 
-       await FoodModel.findByIdAndDelete(food_id);
+
+      await FoodModel.findByIdAndDelete(food_id);
 
 
       return res.status(200).json({
@@ -67,7 +86,7 @@ export const deleteFood = async (req, res) => {
       });
 
 
-   } catch (error){
+   } catch (error) {
       return res.status(500).json({
          success: false,
          message: 'Server error'
@@ -76,38 +95,57 @@ export const deleteFood = async (req, res) => {
 
 };
 
-export const viewFood = async (req, res) => {
+export const viewFood = async (req, res, next) => {
    try {
-       const food_id = req.params.id;
+      const food_id = req.params.id;
+      const food = await FoodModel.findById(food_id);
 
-       const food = await FoodModel.findById(food_id);
 
-       return req.status(200).json({
-           success: true,
-           message: 'Fetched',
-           data: { food: food},
-       });
-   }   catch (error) {
-       return res.status(500).json({
-           success: false,
-           message: 'server error',
-       });
+      return res.status(200).json({
+         success: true,
+         message: 'Fetched',
+         data: { food: food },
+      });
+   } catch (error) {
+      return res.status(500).json({
+         success: false,
+         message: 'server error',
+      });
    }
 };
 
 export const getAllFood = async (req, res) => {
    try {
-       const food = await FoodModel.find();
+      const food = await FoodModel.aggregate([
+         {
+            $lookup: {
+               from: CategoryModel.modelName,
+               localField: 'category',
+               foreignField: '_id',
+               as: 'category'
+            }
+         },
+         {
+            $unwind: '$category'
+         },
+         {
+            $project: {
+               foodName: 1,
+               price: 1,
+               category: '$category.categoryname'
+            }
+         }
+      ]);
 
-       return res.status(200).json({
-           success: true,
-           message: 'All Data Fetched',
-           data: { food: food},
-       });
+      return res.status(200).json({
+         success: true,
+         message: 'All Data Fetched',
+         data: { food: food },
+      });
    } catch (error) {
-       return res.status(500).json({
-           success: false,
-           message: 'server error',
-       });
+      return res.status(500).json({
+         success: false,
+         message: 'server error',
+      });
    }
 };

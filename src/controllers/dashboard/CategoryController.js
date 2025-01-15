@@ -2,11 +2,11 @@ import { CategoryModel } from "../../models/CategoryModel.js";
 
 
 export const createCategory = async(req, res) => {
- try {
-     const { category_id, categoryname } = req.body;
+ try { 
+    console.log(req.body)
+     const { categoryName } = req.body;
      await CategoryModel.create({
-        category_id: category_id,
-        categoryname: categoryname,
+        categoryname: categoryName,
        
 
 
@@ -26,16 +26,16 @@ export const createCategory = async(req, res) => {
 
 export const updateCategory = async (req, res) => {
    try {
+
       const category_id = req.params.id;
-      const { name, description } = req.body;
+      const { categoryId, categoryName } = req.body;
+      
+      const dataToUpdate = await CategoryModel.findById({_id:category_id});
 
-      const dataToUpdate = await CategoryModel.findById(category_id);
-
-      dataToUpdate.name = name;
-      dataToUpdate.description = description;
+      dataToUpdate.category_id = categoryId;
+      dataToUpdate.categoryname = categoryName;
 
       await dataToUpdate.save();
-
       return res.status(200).json({
          success: true,
          message: 'Updated'
@@ -43,6 +43,7 @@ export const updateCategory = async (req, res) => {
 
 
    } catch (error){
+      console.log(error)
       return res.status(500).json({
          success: false,
          message: 'Server error'
@@ -80,9 +81,9 @@ export const viewCategory = async (req, res) => {
    try {
        const category_id = req.params.id;
 
-       const category = await CategoryModel.findById(category_id);
+       const category = await CategoryModel.findById({_id:category_id});
 
-       return req.status(200).json({
+       return res.status(200).json({
            success: true,
            message: 'Fetched',
            data: { category: category},
@@ -98,7 +99,7 @@ export const viewCategory = async (req, res) => {
 export const getAllCategory = async (req, res) => {
    try {
        const category = await CategoryModel.find();
-
+console.log(category)
        return res.status(200).json({
            success: true,
            message: 'All Data Fetched',

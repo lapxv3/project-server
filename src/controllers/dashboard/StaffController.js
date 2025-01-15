@@ -1,39 +1,45 @@
+import dayjs from "dayjs";
 import { StaffModel } from "../../models/StaffModel.js";
+import bcrypt from 'bcrypt';
 
-export const createStaff = async(req, res) => {
- try {
-     const { staff_id, username, password, staff_name, email_id  } = req.body;
-     await StaffModel.create({
-        staff_id: staff_id,
-        username: username,
-        password: password,
-        staff_name: staff_name,
-        email_id: email_id,
+export const createStaff = async (req, res) => {
+   try {
+      // staff_id, 
+      const { email_id, contactNumber, password, userName, } = req.body;
+      const salt = bcrypt.genSaltSync(10);
+      const hash = bcrypt.hashSync(password, salt);
 
+      await StaffModel.create({
+         //   staff_id: staff_id,
+         userName: userName,
+         password: hash,
+         email_id: email_id,
+         contactNumber: contactNumber,
 
-     });
+      });
 
-     return res.status(200).json({
-        success: true,
-        message: 'Created Successfully!',
-     });
- } catch (error){
-    return res.status(500).json({
-        success: false,
-        message: error.message,
-    });
- }
+      return res.status(200).json({
+         success: true,
+         message: 'Created Successfully!',
+      });
+   } catch (error) {
+      return res.status(500).json({
+         success: false,
+         message: error.message,
+      });
+   }
 };
 
 export const updateStaff = async (req, res) => {
    try {
       const staff_id = req.params.id;
-      const { name, description } = req.body;
-
+      const { email_id, userName, contactNumber } = req.body;
+      console.log(req.body);
       const dataToUpdate = await StaffModel.findById(staff_id);
-
-      dataToUpdate.name = name;
-      dataToUpdate.description = description;
+      console.log('data', dataToUpdate)
+      dataToUpdate.userName = userName;
+      dataToUpdate.contactNumber = contactNumber;
+      dataToUpdate.email_id = email_id;
 
       await dataToUpdate.save();
 
@@ -43,7 +49,7 @@ export const updateStaff = async (req, res) => {
       });
 
 
-   } catch (error){
+   } catch (error) {
       return res.status(500).json({
          success: false,
          message: 'Server error'
@@ -56,19 +62,20 @@ export const updateStaff = async (req, res) => {
 export const deleteStaff = async (req, res) => {
    try {
       const staff_id = req.params.id;
-      
 
 
-       await StaffModel.findByIdAndDelete(staff_id);
 
+      const staff = await StaffModel.findById(staff_id);
 
+      staff.deletedAt = new dayjs()
+      staff.save()
       return res.status(200).json({
          success: false,
          message: 'Deleted'
       });
 
 
-   } catch (error){
+   } catch (error) {
       return res.status(500).json({
          success: false,
          message: 'Server error'
@@ -79,36 +86,36 @@ export const deleteStaff = async (req, res) => {
 
 export const viewStaff = async (req, res) => {
    try {
-       const staff_id = req.params.id;
+      const staff_id = req.params.id;
+      const staff = await StaffModel.findById(staff_id);
 
-       const staff = await StaffModel.findById(staff_id);
 
-       return req.status(200).json({
-           success: true,
-           message: 'Fetched',
-           data: { staff: staff},
-       });
-   }   catch (error) {
-       return res.status(500).json({
-           success: false,
-           message: 'server error',
-       });
+      return res.status(200).json({
+         success: true,
+         message: 'Fetched',
+         data: { staff: staff },
+      });
+   } catch (error) {
+      return res.status(500).json({
+         success: false,
+         message: 'server error',
+      });
    }
 };
 
 export const getAllStaff = async (req, res) => {
    try {
-       const staff = await StaffModel.find();
-
-       return res.status(200).json({
-           success: true,
-           message: 'All Data Fetched',
-           data: { staff: staff},
-       });
+      const staff = await StaffModel.find({deletedAt:null});
+      console.log(staff)
+      return res.status(200).json({
+         success: true,
+         message: 'All Data Fetched',
+         data: { staff: staff },
+      });
    } catch (error) {
-       return res.status(500).json({
-           success: false,
-           message: 'server error',
-       });
+      return res.status(500).json({
+         success: false,
+         message: 'server error',
+      });
    }
 };

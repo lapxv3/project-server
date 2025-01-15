@@ -3,7 +3,7 @@ import { createCategory, deleteCategory, getAllCategory, updateCategory, viewCat
 
 export const CategoryRouter = express.Router();
 
-CategoryRouter.post('/', createCategory);
+CategoryRouter.post('/create', createCategory);
 CategoryRouter.put('/update/:id', updateCategory);
 CategoryRouter.delete('/delete/:id', deleteCategory);
 CategoryRouter.get('/view/:id', viewCategory);

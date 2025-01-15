@@ -3,32 +3,34 @@ import mongoose from 'mongoose';
 
 const staffSchema = new mongoose.Schema(
 	{
-		staff_id : {
+
+		userName: {
 			type: String,
 			required: true,
 		},
 
-	    username : {
+		password: {
 			type: String,
-			required: false,
+			required: true,
 		},
 
-		password : {
-			type: Number,
-			required: false,
-		},
 
-		staff_name : {
+		email_id: {
 			type: String,
-			required: false,
+			required: true,
 		},
 
-		email_id : {
+
+		contactNumber: {
 			type: String,
-			required: false,
+			required: true,
 		},
 
-		
+		deletedAt: {
+			type: Date,
+			required:false,
+			default:null
+		}
 
 	},
 	{ timestamps: true },

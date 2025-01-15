@@ -4,10 +4,11 @@ import mongoSanitize from 'express-mongo-sanitize';
 import {cwd} from 'process';
 import ConnectMongoDB from './src/config/db.js';
 import { DashboardRouter } from './src/routes/dashboard/MainRoutes.js';
+import { postAuth } from './src/controllers/dashboard/AuthController.js';
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.urlencoded({ extended: true }));
 app.use(mongoSanitize());
 app.use('/uploads', express.static(cwd() + '/uploads', { maxAge: 31557600 }));
 app.use('/api/dashboard', DashboardRouter);
@@ -37,6 +38,8 @@ app.use((err, req, res, next) => {
 	}
 	next();
 });
+
+
 ConnectMongoDB();
 const PORT  = 5000;
 app.listen(PORT, async () => {
